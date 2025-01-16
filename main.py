@@ -1,6 +1,6 @@
 import numpy as np
 import itertools as it
-from example import load_data
+from example import load_data, diagnostics
 from queue import PriorityQueue
 
 from ortools.graph.python import min_cost_flow
@@ -24,11 +24,11 @@ print("allocatable doubles: ", MAX_DOUBLES)
 assert MAX_SINGLES + 2*MAX_DOUBLES >= len(students), "too few rooms allocatable"
 
 
-def housing_points(student: str) -> int:
+def housing_points(student: str):
     """housing points based on time spent in NV + time spent at MIT, tiebroken by time spent in NV"""
     return 8 * (years[student][0] + years[student][1]) + 2 * years[student][0]
 
-def affinity_roomtype(student: str, roomtype: str) -> int:
+def affinity_roomtype(student: str, roomtype: str):
     if student in squat:
         base_affinity = 1 if roomtype == squat[student][0] else -1
         base_affinity *= SCALE_SQUAT
@@ -50,7 +50,7 @@ def student_similarity(student1: str, student2: str):
 def affinity_roomloc(student: str, roomtype: str) -> int:
     # TODO account for lounge location, potentially other things, and
     # TODO account for squatting
-    return 0
+    return SCALE_ROOMLOC * 0
 
 
 ################ assign room types & double rooms ################
@@ -102,7 +102,6 @@ def assign_roommates(double_students):
         return prefs
     
     sp_map = {student: Player(student) for student in double_students}
-    sp_map_inv = {val: key for key, val in sp_map.items()}
     for student in double_students:
         sp_map[student].set_prefs(
             [sp_map[s] for s in preference_list(student)]
@@ -215,3 +214,5 @@ for roommate, double in double_assignment.items():
 
 pprint.pprint(room_assignment)
 pprint.pprint(students_in_room)
+
+diagnostics(room_assignment, students_in_room)

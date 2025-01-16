@@ -52,3 +52,7 @@ room_pref = {
 
 def load_data():
     return students, student_info, rooms, room_info, years, squat, roommate_pref, room_pref
+
+
+def diagnostics(room_assignment, students_in_room):
+    print("diagnostics TODO")
