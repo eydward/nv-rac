@@ -2,6 +2,10 @@ import numpy as np
 import itertools as it
 from example import load_data, diagnostics
 from queue import PriorityQueue
+import random
+
+random_seed = 42
+random.seed(random_seed)
 
 from ortools.graph.python import min_cost_flow
 
@@ -12,8 +16,8 @@ SCALE_ROOMTYPE = 1  # scale factor on compatibility(student, room type)
 SCALE_ROOMLOC = 0.8  # scale factor on compatibility(student, room location)
 SCALE_SQUAT = 5  # scale factor on squatting rooms
 
-FREE_SINGLES = 2  # reserve singles to keep empty
-FREE_DOUBLES = 2  # reserve doubles to keep empty
+FREE_SINGLES = 0  # reserve singles to keep empty
+FREE_DOUBLES = 0  # reserve doubles to keep empty
 
 students, student_info, rooms, room_info, years, squat, roommate_pref, room_pref = load_data()
 
@@ -60,24 +64,26 @@ def assign_roomtypes(students):
     # descending order of their priority on this roomtype
     single_students = PriorityQueue()
     double_students = PriorityQueue()
+    
     for s in students:
+        # pqueue consists of triples (affinity, random tiebreaker number, student)
         if room_pref[s] == "single":
-            single_students.put((affinity_roomtype(s, "single"), s))
+            single_students.put((affinity_roomtype(s, "single"), random.random(), s))
         else:
-            double_students.put((affinity_roomtype(s, "double"), s))
+            double_students.put((affinity_roomtype(s, "double"), random.random(), s))
 
     # ensure #singles <= MAX_SINGLES
     while len(single_students.queue) > MAX_SINGLES or len(double_students.queue) % 2 != 0:
-        saff, s = single_students.get()
-        double_students.put((affinity_roomtype(s, "double"), s))
+        saff, srand, s = single_students.get()
+        double_students.put((affinity_roomtype(s, "double"), srand, s))
 
     # ensure #doubles <= MAX_DOUBLES
     while len(double_students.queue) > 2*MAX_DOUBLES or len(double_students.queue) % 2 != 0:
-        saff, s = double_students.get()
-        single_students.put((affinity_roomtype(s, "single"), s))
+        saff, srand, s = double_students.get()
+        single_students.put((affinity_roomtype(s, "single"), srand, s))
 
-    single_students = [s[1] for s in single_students.queue]
-    double_students = [s[1] for s in double_students.queue]
+    single_students = [s[2] for s in single_students.queue]
+    double_students = [s[2] for s in double_students.queue]
     print("students assigned to singles: ", single_students)
     print("students assigned to doubles: ", double_students)
     return single_students, double_students
