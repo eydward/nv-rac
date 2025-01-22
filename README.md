@@ -1,5 +1,5 @@
 # rac
-tool to compute (approximately) optimal housing assignments in new vassar.
+work-in-progress tool to compute (approximately) optimal housing assignments in new vassar.
 
 ## algorithm
 
