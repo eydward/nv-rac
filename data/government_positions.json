@@ -1,0 +1,57 @@
+{
+    "fall 2022": {
+    },
+    "spring 2023": {
+    },
+    "fall 2023": {
+        "president": "pisinger,alicey",
+        "vice president": "nchow",
+        "treasurer": "ashleet",
+        "secretary": "amcs",
+        "makerspace chair": "elibell",
+        "room assignment chair": "beaacasa",
+        "photographer": "omaro",
+        "facilities chair": "cbush, molimene",
+        "social chair": "eroman49,sabriw",
+        "dining chair": "sqcheng",
+        "webmaster": "edwardyu"
+    },
+    "spring 2024": {
+        "president": "sqcheng",
+        "vice president": "molimene",
+        "treasurer": "ashleet",
+        "secretary": "amcs",
+        "makerspace chair": "elibell",
+        "room assignment chair": "jtoler,alexhu",
+        "photographer": "omaro",
+        "facilities chair": "cbush,molimene",
+        "social chair": "eroman49,sabriw",
+        "dining chair": "sqcheng",
+        "webmaster": "edwardyu"
+    },
+    "fall 2024": {
+        "president": "sqcheng",
+        "vice president": "molimene",
+        "treasurer": "ashleet",
+        "secretary": "amcs",
+        "makerspace chair": "jdhagood",
+        "room assignment chair": "jtoler,edwardyu",
+        "photographer": "omar orozco",
+        "facilities chair": "jonesvi",
+        "social chair": "looeysa",
+        "dining chair": "minh23",
+        "webmaster": "ongzz"
+    },
+    "spring 2025": {
+        "president": "molimene,sqcheng",
+        "treasurer": "ashleet",
+        "secretary": "amcs",
+        "makerspace chair": "jdhagood",
+        "room assignment chair": "jtoler,edwardyu",
+        "photographer": "omar orozco",
+        "facilities chair": "jonesvi",
+        "social chair": "m4c,mayabose,looeysa",
+        "dining chair": "minh23",
+        "webmaster": "anmdinh"
+    }
+}

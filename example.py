@@ -35,17 +35,21 @@ import numpy as np
 #### tiebreaking randomness test: a,b both want singles, but there's only one!
 students = ["a", "b", "c"] # array of all student kerbs (distinct)
 student_info = {
-    "a": np.array([1, 2, 0, 1], dtype=int),
-    "b": np.array([1, 2, 0, 1], dtype=int),
-    "c": np.array([1, 1, 1, 1], dtype=int)
+    "a": {
+        "year": 3,
+        "prefs": np.array([1, 2, 0, 1], dtype=int),
+    },
+    "b": {
+        "year": 3,
+        "prefs": np.array([1, 2, 0, 1], dtype=int),
+    },
+    "c": {
+        "year": 1,
+        "prefs": np.array([1, 1, 1, 1], dtype=int),
+    },
 }  # map: student -> np.vector of preferences (TODO)
 rooms = {"single": ["1"], "double": ["2", "3"]}
 room_info = {}          # map: room -> list of room properties
-years = {
-    "a": (3, 3),
-    "b": (3, 3),
-    "c": (1, 1),
-}  # map: student -> (years in New Vassar, years at MIT)
 squat = {}              # map: student -> (roomtype, room#) if squatting previous room
 roommate_pref = {}      # map: student -> student
 room_pref = {
@@ -56,7 +60,7 @@ room_pref = {
 
 
 def load_data():
-    return students, student_info, rooms, room_info, years, squat, roommate_pref, room_pref
+    return students, student_info, rooms, room_info, squat, roommate_pref, room_pref
 
 
 def diagnostics(room_assignment, students_in_room):

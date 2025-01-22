@@ -29,8 +29,10 @@ assert MAX_SINGLES + 2*MAX_DOUBLES >= len(students), "too few rooms allocatable"
 
 
 def housing_points(student: str):
-    """housing points based on time spent in NV + time spent at MIT, tiebroken by time spent in NV"""
-    return 8 * (years[student][0] + years[student][1]) + 2 * years[student][0]
+    """
+    TODO housing points based on time spent in NV + time spent at MIT, tiebroken by time spent in NV
+    """
+    return student_info[student]["housing points"]
 
 def affinity_roomtype(student: str, roomtype: str):
     if student in squat:

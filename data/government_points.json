@@ -1,0 +1,13 @@
+{
+    "president": 0.5,
+    "vice president": 0.5,
+    "treasurer": 0.5,
+    "secretary": 0.25,
+    "makerspace chair": 0.25,
+    "room assignment chair": 0.25,
+    "photographer": 0.25,
+    "facilities chair": 0.25,
+    "social chair": 0.25,
+    "dining chair": 0.25,
+    "webmaster": 0.25
+}
