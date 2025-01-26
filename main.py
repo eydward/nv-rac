@@ -19,7 +19,7 @@ SCALE_SQUAT = 5  # scale factor on squatting rooms
 FREE_SINGLES = 0  # reserve singles to keep empty
 FREE_DOUBLES = 0  # reserve doubles to keep empty
 
-students, student_info, rooms, room_info, years, squat, roommate_pref, room_pref = load_data()
+students, student_info, rooms, room_info, squat, roommate_pref, room_pref = load_data()
 
 MAX_SINGLES = len(rooms["single"]) - FREE_SINGLES
 MAX_DOUBLES = len(rooms["double"]) - FREE_DOUBLES
@@ -47,13 +47,13 @@ def student_similarity(student1: str, student2: str):
     returns tuple: bool = False if you can't put them together, bool = True if you can
     second term is a float; lower values indicate more similar
     """
-    # TODO consider banned pairs & gender diffs or something
+    # TODO consider banned pairs & gender diffs & class diffs
     # return False, 0
 
     base_affinity = np.linalg.norm(student_info[student1] - student_info[student2])
     return True, SCALE_STUD * (housing_points(student1) + housing_points(student2)) * base_affinity
 
-def affinity_roomloc(student: str, roomtype: str) -> int:
+def affinity_roomloc(student: str, room: str) -> int:
     # TODO account for lounge location, potentially other things, and
     # TODO account for squatting
     return SCALE_ROOMLOC * 0
