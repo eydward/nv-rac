@@ -7,16 +7,18 @@ YEAR = 2025
 # TODO you also have to handle people who forgot to fill in the form
 
 students = []  # array of all student kerbs (distinct)
-student_info = {}  # map: student -> np.vector of preferences (TODO)
-room_info = {}  # map: room -> list of room properties
 squat = {}  # map: student -> (roomtype, room#) if squatting previous room
 roommate_pref = {}  # map: student -> student
 room_pref = {}  # map: student -> str(room type)
 
-def read_housing_intent(student_info):
+def read_housing_intent():
     """
     modifies student_info to add personal preference information from the housing intent form
     """
+    student_info = {}  # map: student -> preferences (TODO)
+
+    housing_intent = pd.read_csv("./data/confidential/housing_intent.csv")
+    
     cleanliness = {
         "I prefer my room to be neat and clean all of the time": 1,
         "I like my room to be neat most of the time but can tolerate some clutter": 0,
@@ -57,8 +59,6 @@ def read_housing_intent(student_info):
         "Hosting overnight guests frequently is fine with me, within the housing policy.": 1
     }
 
-    housing_intent = pd.read_csv("./data/confidential/housing_intent.csv")
-    
     # check for duplicate entries (e.g. created by supplemental requests), then throw an Error, since these must be resolved manually in case of conflicts
     if housing_intent["Kerberos"].duplicated().empty:
         print("duplicated kerbs:")
@@ -84,6 +84,8 @@ def read_housing_intent(student_info):
             "overnight": overnight.get(row["Guest"], 0),
             "esa": row["Living with ESA"] == "Yes"
         }
+
+    return student_info
     
     # TODO - unclear if/where I can obtain a list of all residents
     # assert set(student_info.keys()) == set(students), "not all students found in housing intent forms"
@@ -108,7 +110,7 @@ def compute_housing_points(student_info):
                 if stud in students:
                     student_info[stud]["housing points"] += gov_points[position]
 
-def load_rooms(room_info, rooms):
+def load_rooms():
     ## no longer necessary to parse data/new_vassar_rooms.txt, since data/new_vassar_rooms.json is more useful
     # with open("./data/new_vassar_rooms.txt") as room_list_file:
     #     room_list = [line.rstrip() for line in room_list_file]
@@ -126,25 +128,48 @@ def load_rooms(room_info, rooms):
     #         else:
     #             raise Exception(f"room list file is corrupted: room {room} appears more than 2 times")
     
+    rooms = {"single": [], "double": []}
+    room_info = {}  # map: room -> list of room properties
+
     room_info = json.load("./data/new_vassar_rooms.json")
     for rooms in room_info:
         room_info[rooms] = room_info[rooms].split(",")
 
     assert len(rooms["single"]) == 120, f"there should be 120 singles but room list file contains only {len(rooms["single"])}"
     assert len(rooms["double"]) == 165, f"there should be 165 doubles but room list file contains only {len(rooms["double"])}"
+    
+    return rooms, room_info
+
+def read_house_sheet():
+    # reads a housing assignment out of a house sheet
+    # you need this for multiple things, at minimum (1) reading last year's house sheet for squatting info, and (2) loading existing assignments when you assign the frosh
+    
+    house_sheet = pd.read_csv("data/confidential/house_sheet.csv")
+    room_assignment = {} # map 
+    students_in_room = {} # map
+    for idx, row in house_sheet.iterrows():
+        room = row["Room"]
+        kerb = row["Kerberos"]
+        if pd.isna(kerb):
+            kerb = None
+        else:
+            room_assignment[kerb] = room
+        
+        if room not in students_in_room:
+            students_in_room[room] = tuple()
+        students_in_room[room] += (kerb,)
+    return room_assignment, students_in_room
 
 def load_data():
     students = [] # TODO list of all students
 
-    rooms = {"single": [], "double": []}
-    room_info = {}
-    load_rooms(room_info, rooms)
+    rooms, room_info = load_rooms()
 
-    read_housing_intent(student_info)
-    
+    student_info = read_housing_intent()    
     compute_housing_points(student_info) 
 
     return students, student_info, rooms, room_info
     # return students, student_info, rooms, room_info, squat, roommate_pref, room_pref
 
-load_data()
+# load_data()
+print(read_house_sheet())
